@@ -27,6 +27,12 @@ public class AgentReq extends Agent {
 		addBehaviour(new AskReqBehav());
 	}
 
+	/**
+	 * Receive request form plateform
+	 * Send ontologie to init
+	 * @author AudreyB
+	 *
+	 */
 	public class AskReqBehav extends Behaviour {
 		private static final long serialVersionUID = 1L;
 
@@ -69,6 +75,12 @@ public class AgentReq extends Agent {
 		
 	}
 	
+	/**
+	 * Send a request
+	 * And receive response
+	 * @author AudreyB
+	 *
+	 */
 	private class ReqBehav extends Behaviour {
 
 		private Message message;

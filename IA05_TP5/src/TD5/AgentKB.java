@@ -79,7 +79,11 @@ public class AgentKB extends Agent {
 			return false;
 		}
 	}
-	
+	/**
+	 * Receive a request to Execute
+	 * @author AudreyB
+	 *
+	 */
 	public class RequestBehav extends Behaviour {
 
 		private String conversId;
