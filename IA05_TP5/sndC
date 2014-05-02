@@ -1,0 +1,6 @@
+main=false
+gui=false
+container-name = TD4
+host = 127.0.0.1
+local-port=9001
+port=9001

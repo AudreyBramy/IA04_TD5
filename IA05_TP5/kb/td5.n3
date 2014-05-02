@@ -1,0 +1,26 @@
+# baseURI: http://www.owl-ontologies.com/td5
+# imports: file:/Z:/IA04/foaf.n3
+
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix td5:	 <http://www.owl-ontologies.com/td5> .
+@prefix xsd:	 <http://www.w3.org/2001/XMLSchema> .
+
+td5:topic_un rdf:type owl:Thing ;
+	foaf:name "Topic_Un"^^xsd:string .
+td5:topic_deux rdf:type owl:Thing ;
+	foaf:name "Topic_Deux"^^xsd:string .
+td5:topic_trois rdf:type owl:Thing ;
+	foaf:name "Topic_Trois"^^xsd:string .
+td5:jean rdf:type foaf:Person ; 
+	foaf:topic_interest td5:topic_deux .
+td5:paul a foaf:Person ;
+	foaf:knows td5:jean;
+	foaf:topic_interest td5:topic_un.
+td5:audrey a foaf:Person ;
+	foaf:knows td5:paul ;
+	foaf:knows td5:jean ; 
+	foaf:topic_interest td5:topic_un .
+	
