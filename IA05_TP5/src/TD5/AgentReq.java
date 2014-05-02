@@ -1,6 +1,8 @@
 package TD5;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jade.core.AID;
@@ -22,10 +24,10 @@ public class AgentReq extends Agent {
 	protected void setup(){
 		mapper = new ObjectMapper();
 		onto = false;
-		addBehaviour(new ReqBehav());
+		addBehaviour(new AskReqBehav());
 	}
 
-	public class ReqBehav extends Behaviour {
+	public class AskReqBehav extends Behaviour {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -39,10 +41,16 @@ public class AgentReq extends Agent {
 				try {
 					msg = mapper.readValue(message.getContent(), Message.class);
 					if(msg.getOntologie() != null){
+						String conversid = msg.getOntologie()+message.getPostTimeStamp();
 						toSend.setContent(msg.getOntologie());
+						toSend.setConversationId(conversid);
 						toSend.addReceiver(getReceiver("Agent","KB"));
-						send(toSend);
+						
 						onto = true;
+						addBehaviour(new ReqBehav(msg, conversid));
+						
+						send(toSend);
+						
 					} else {
 						System.out.println("Ontologie null");
 					}
@@ -56,6 +64,55 @@ public class AgentReq extends Agent {
 
 		@Override
 		public boolean done() {
+			return false;
+		}
+		
+	}
+	
+	private class ReqBehav extends Behaviour {
+
+		private Message message;
+		private String conversId;
+		private StringWriter sw;
+		
+		public ReqBehav(Message msg, String convers) {
+			this.message = msg;
+			this.conversId = convers;
+			
+			sw = new StringWriter();
+			try {
+				mapper.writeValue(sw, message);
+			} catch (IOException e) {e.printStackTrace();}
+			
+			ACLMessage toSend = new ACLMessage(ACLMessage.REQUEST);
+			toSend.setConversationId(conversId);
+			toSend.addReceiver(getReceiver("Agent","KB"));
+			toSend.setContent(sw.toString());
+		
+			send(toSend);
+		}
+		@Override
+		public void action() {
+			MessageTemplate mt = MessageTemplate.and(
+					MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+					MessageTemplate.MatchConversationId(conversId));
+			ACLMessage message = receive(mt);
+			if(message != null){
+				try {
+					Message msg = mapper.readValue(message.getContent(), Message.class);
+					List<String> result = msg.getResult();
+					System.out.println("Résultat : \n");
+					for (String string : result) {
+						System.out.println(string + "\n");
+					}
+				} catch (IOException e) {e.printStackTrace();}
+			} else block();
+			
+		}
+
+		@Override
+		public boolean done() {
+			// TODO Auto-generated method stub
 			return false;
 		}
 		
