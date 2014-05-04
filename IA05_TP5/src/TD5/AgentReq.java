@@ -42,13 +42,18 @@ public class AgentReq extends Agent {
 			ACLMessage message = receive(mt);
 	
 			if(message != null){
+				InformRequest ir = new InformRequest();
+				StringWriter sw = new StringWriter();
 				Message msg = null;
 				ACLMessage toSend = new ACLMessage(ACLMessage.INFORM);
 				try {
 					msg = mapper.readValue(message.getContent(), Message.class);
 					if(msg.getOntologie() != null){
+						ir.setModelFile(msg.getOntologie());
+						ir.setRequestType(msg.getReqType());
+						mapper.writeValue(sw, ir);
 						String conversid = msg.getOntologie()+message.getPostTimeStamp();
-						toSend.setContent(msg.getOntologie());
+						toSend.setContent(sw.toString());
 						toSend.setConversationId(conversid);
 						toSend.addReceiver(getReceiver("Agent","KB"));
 						
@@ -129,6 +134,7 @@ public class AgentReq extends Agent {
 		}
 		
 	}
+	
 	private AID getReceiver(String type, String Name) {
         AID rec = null;
         DFAgentDescription template =new DFAgentDescription();

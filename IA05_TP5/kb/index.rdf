@@ -1,0 +1,24 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ex: <http://www.owl-ontologies.com/ex#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix td5: <http://www.w3.org/utc/ia04/td5/td5#> .
+
+td5:topic_un rdf:type owl:Thing ;
+	foaf:name "Topic_Un"^^xsd:string .
+td5:topic_deux rdf:type owl:Thing ;
+	foaf:name "Topic_Deux"^^xsd:string .
+td5:topic_trois rdf:type owl:Thing ;
+	foaf:name "Topic_Trois"^^xsd:string .
+td5:jean rdf:type foaf:Person ; 
+	foaf:name "Jean"^^xsd:string ;
+	foaf:topic_interest td5:topic_deux .
+td5:paul a foaf:Person ;
+	foaf:knows td5:jean;
+	foaf:topic_interest td5:topic_un.
+td5:audrey a foaf:Person ;
+	foaf:knows td5:paul ;
+	foaf:knows td5:jean ; 
+	foaf:topic_interest td5:topic_un .

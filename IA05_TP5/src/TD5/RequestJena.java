@@ -1,10 +1,10 @@
 package TD5;
 
-public class Request {
+public class RequestJena {
 	private String requestName;
 	private String requestInfo;
 	
-	public Request(){}
+	public RequestJena(){}
 
 	public String getRequestName() {
 		return requestName;

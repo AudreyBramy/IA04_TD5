@@ -1,5 +1,7 @@
 # baseURI: http://www.owl-ontologies.com/td5
 # imports: file:/Z:/IA04/foaf.n3
+# Spain : node148332300
+# Mexique : node432425036
 
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
@@ -7,6 +9,7 @@
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix td5:	 <http://www.owl-ontologies.com/td5> .
 @prefix xsd:	 <http://www.w3.org/2001/XMLSchema> .
+@prefix geo: 	<http://linkedgeodata.org/triplify/> .
 
 td5:topic_un rdf:type owl:Thing ;
 	foaf:name "Topic_Un"^^xsd:string .
@@ -14,13 +17,15 @@ td5:topic_deux rdf:type owl:Thing ;
 	foaf:name "Topic_Deux"^^xsd:string .
 td5:topic_trois rdf:type owl:Thing ;
 	foaf:name "Topic_Trois"^^xsd:string .
-td5:jean rdf:type foaf:Person ; 
+td5:jean rdf:type foaf:Person ;
+	foaf:firstName "Jean"^^xsd:string ;
 	foaf:topic_interest td5:topic_deux .
 td5:paul a foaf:Person ;
 	foaf:knows td5:jean;
-	foaf:topic_interest td5:topic_un.
+	foaf:topic_interest geo:node432425036 .
 td5:audrey a foaf:Person ;
 	foaf:knows td5:paul ;
 	foaf:knows td5:jean ; 
-	foaf:topic_interest td5:topic_un .
+	foaf:topic_interest geo:node148332300 .
+	
 	

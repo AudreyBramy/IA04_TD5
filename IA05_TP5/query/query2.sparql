@@ -1,0 +1,11 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lgd: <http://linkedgeodata.org/>
+PREFIX lgdo: <http://linkedgeodata.org/ontology/>
+
+	
+SELECT DISTINCT * FROM <http://linkedgeodata.org>
+WHERE {
+	?country a lgdo:Country ;
+	lgdo:capital_city ?city ;
+	lgdo:wikipedia ?name .
+}

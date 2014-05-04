@@ -5,9 +5,12 @@ import java.util.List;
 public class Message {
 
 	private String ontologie;
-	private Request request;
+	private String reqType; // jena ou 
+	private RequestJena request;
 	private List<String> result;
 
+	public Message() {}
+	
 	public List<String> getResult() {
 		return result;
 	}
@@ -15,8 +18,14 @@ public class Message {
 	public void setResult(List<String> result) {
 		this.result = result;
 	}
+	
+	public String getReqType() {
+		return reqType;
+	}
 
-	public Message() {}
+	public void setReqType(String reqType) {
+		this.reqType = reqType;
+	}
 	
 	public String getOntologie() {
 		return ontologie;
@@ -24,10 +33,10 @@ public class Message {
 	public void setOntologie(String ontologie) {
 		this.ontologie = ontologie;
 	}
-	public Request getRequest() {
+	public RequestJena getRequest() {
 		return request;
 	}
-	public void setRequest(Request request) {
+	public void setRequest(RequestJena request) {
 		this.request = request;
 	}
 }

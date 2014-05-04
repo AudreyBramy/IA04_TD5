@@ -1,2 +1,8 @@
-{"ontologie":"kb/td5.n3",
+{"ontologie":"file:kb/index.rdf", "reqType":"jena",
 "request":{"requestName":"getInfoById", "requestInfo":"jean"}}
+
+{"ontologie":"file:kb/index.rdf", "reqtype":"jena",
+"request":{"requestName":"getInfoByName", "requestInfo":"Jean"}}
+
+{"ontologie":"file:kb/index.rdf", "reqtype":"jena",
+"request":{"requestName":"getKnowsPerson", "requestInfo":"jean"}}
