@@ -261,7 +261,6 @@ public class AgentKB extends Agent {
 
             MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST), MessageTemplate.MatchConversationId(conversId));
 			ACLMessage message = receive(mt);
-			System.out.println(this.conversId);
 			if(message != null){
                 System.out.println("test4");
                 RequestSparql msg = null;
@@ -296,8 +295,7 @@ public class AgentKB extends Agent {
 		}
 		
 		public RequestSparql runExecQuery(RequestSparql msg, Model model) {
-			String qfilename = msg.getRequestFile();
-            Query query = QueryFactory.read(qfilename);
+            Query query = QueryFactory.read(msg.getRequestFile());
 			System.out.println(query.toString());
 			QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
 			msg.sparqlResult = queryExecution.execSelect();

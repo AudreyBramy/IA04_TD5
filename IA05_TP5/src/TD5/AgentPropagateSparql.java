@@ -19,7 +19,7 @@ public class AgentPropagateSparql extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	protected ObjectMapper mapper = new ObjectMapper();
-
+    public String Globalcid;
     protected void setup() {
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
@@ -66,13 +66,14 @@ public class AgentPropagateSparql extends Agent {
 					ACLMessage toSend = new ACLMessage(ACLMessage.INFORM);
 					toSend.addReceiver(getReceiver("Agent", "KB"));
 					toSend.setPerformative(ACLMessage.INFORM);
-					String cid = (myAgent.getAID()+""+message.getPostTimeStamp());
-					toSend.setConversationId(cid);
+			        Globalcid = myAgent.getAID()+""+message.getPostTimeStamp();
+					toSend.setConversationId(Globalcid);
 					toSend.setContent(sw.toString());
 					
 					send(toSend);
+                    System.out.println("appelconstructeur");
 
-					addBehaviour(new FormatRequestBehav(cid));
+                    addBehaviour(new FormatRequestBehav(Globalcid));
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -104,7 +105,9 @@ public class AgentPropagateSparql extends Agent {
 		private String conversId;
 		
 		public FormatRequestBehav(String cid){
-			this.conversId = cid;
+            System.out.println("testconstructeur");
+
+            this.conversId = cid;
 		}
 
 		@Override
@@ -113,10 +116,11 @@ public class AgentPropagateSparql extends Agent {
 			 * Pr�parer la requ�te (�criture dans un fichier type "query.sparql"
 			 * Envoie du nom de fichier � l'agent KB pour l'ex�cution de la requ�te
 			 */
-
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF);
             ACLMessage message = receive(mt);
             if(message != null){
+                System.out.println("test");
+
                 RequestSparql msg = null;
                 StringWriter sw = new StringWriter();
                 RequestSparql sparqlReq = new RequestSparql();
@@ -128,8 +132,7 @@ public class AgentPropagateSparql extends Agent {
                     ACLMessage toSend = new ACLMessage(ACLMessage.REQUEST);
                     toSend.addReceiver(getReceiver("Agent", "KB"));
                     toSend.setPerformative(ACLMessage.REQUEST);
-                    String cid = (myAgent.getAID()+""+message.getPostTimeStamp());
-                    toSend.setConversationId(cid);
+                    toSend.setConversationId(conversId);
                     toSend.setContent(sw.toString());
 
                     send(toSend);
