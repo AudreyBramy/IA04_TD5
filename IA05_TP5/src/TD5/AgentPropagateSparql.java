@@ -113,7 +113,31 @@ public class AgentPropagateSparql extends Agent {
 			 * Pr�parer la requ�te (�criture dans un fichier type "query.sparql"
 			 * Envoie du nom de fichier � l'agent KB pour l'ex�cution de la requ�te
 			 */
-			
+
+            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF);
+            ACLMessage message = receive(mt);
+            if(message != null){
+                RequestSparql msg = null;
+                StringWriter sw = new StringWriter();
+                RequestSparql sparqlReq = new RequestSparql();
+
+                try {
+                    sparqlReq.setRequestFile("query/query.sparql");
+                    mapper.writeValue(sw, sparqlReq);
+
+                    ACLMessage toSend = new ACLMessage(ACLMessage.REQUEST);
+                    toSend.addReceiver(getReceiver("Agent", "KB"));
+                    toSend.setPerformative(ACLMessage.REQUEST);
+                    String cid = (myAgent.getAID()+""+message.getPostTimeStamp());
+                    toSend.setConversationId(cid);
+                    toSend.setContent(sw.toString());
+
+                    send(toSend);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
 		}
 
 		@Override

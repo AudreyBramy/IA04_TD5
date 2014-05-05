@@ -1,7 +1,6 @@
 package TD5;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +85,7 @@ public class AgentKB extends Agent {
 						addBehaviour(new RequestSparqlBehav(message.getConversationId(), ir));
 					}
 				} else {
-						System.err.println("aucune ontologie à initialiser");
+						System.err.println("aucune ontologie ï¿½ initialiser");
 				}
 			}
 		}
@@ -119,7 +118,7 @@ public class AgentKB extends Agent {
 			ACLMessage message = receive(mt);
 			
 			if(message != null){
-				// Execution de la requête
+				// Execution de la requï¿½te
 				Message msg = null;
 				List<String> result = new ArrayList<String>();
 				StringWriter sw = new StringWriter();
@@ -254,24 +253,36 @@ public class AgentKB extends Agent {
 		public RequestSparqlBehav(String cid, InformRequest ir){
 			model = ModelFactory.createDefaultModel();
 			model.read(ir.getModelFile(),null,"TURTLE");
-			this.conversId = conversId;
-		}
+			this.conversId = cid;
+        }
 		
 		@Override
 		public void action() {
-			
-			MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST), MessageTemplate.MatchConversationId(conversId));
+
+            MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST), MessageTemplate.MatchConversationId(conversId));
 			ACLMessage message = receive(mt);
-			
+			System.out.println(this.conversId);
 			if(message != null){
-				Message msg = null;
+                System.out.println("test4");
+                RequestSparql msg = null;
 				try {
-					msg = mapper.readValue(message.getContent(), Message.class);
+					msg = mapper.readValue(message.getContent(), RequestSparql.class);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				runExecQuery("query.sparql", model);
-				// Add result to the message
+                // Add result to the message
+                msg = runExecQuery(msg, model);
+
+                try {
+                    PrintWriter writer = new PrintWriter("query/result.txt", "UTF-8");
+                    writer.println(msg.sparqlResult.toString());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
+                Message reponse = new Message();
 				// Write result in a file
 				
 			}
@@ -284,13 +295,15 @@ public class AgentKB extends Agent {
 			return false;
 		}
 		
-		public void runExecQuery(String qfilename, Model model) {
-			Query query = QueryFactory.read(qfilename);
+		public RequestSparql runExecQuery(RequestSparql msg, Model model) {
+			String qfilename = msg.getRequestFile();
+            Query query = QueryFactory.read(qfilename);
 			System.out.println(query.toString());
 			QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
-			ResultSet r = queryExecution.execSelect();
-			ResultSetFormatter.out(System.out,r);
+			msg.sparqlResult = queryExecution.execSelect();
+			ResultSetFormatter.out(System.out,msg.sparqlResult);
 			queryExecution.close();
+            return msg;
 		}
 		
 	}

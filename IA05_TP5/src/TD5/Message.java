@@ -1,5 +1,7 @@
 package TD5;
 
+import com.hp.hpl.jena.query.ResultSet;
+
 import java.util.List;
 
 public class Message {
@@ -8,6 +10,8 @@ public class Message {
 	private String reqType; // jena ou 
 	private RequestJena request;
 	private List<String> result;
+
+
 
 	public Message() {}
 	
