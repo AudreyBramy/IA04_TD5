@@ -63,14 +63,16 @@ public class AgentPropagateSparql extends Agent {
 					ir.setRequestType(msg.getReqType());
 					mapper.writeValue(sw, ir);
 					
-					message.addReceiver(getReceiver("Agent", "KB"));
-					message.setPerformative(ACLMessage.INFORM);
+					ACLMessage toSend = new ACLMessage(ACLMessage.INFORM);
+					toSend.addReceiver(getReceiver("Agent", "KB"));
+					toSend.setPerformative(ACLMessage.INFORM);
 					String cid = (myAgent.getAID()+""+message.getPostTimeStamp());
-					message.setConversationId(cid);
+					toSend.setConversationId(cid);
+					toSend.setContent(sw.toString());
 					
+					send(toSend);
+
 					addBehaviour(new FormatRequestBehav(cid));
-				    System.out.println(getReceiver("Agent", "KB"));
-					send(message);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

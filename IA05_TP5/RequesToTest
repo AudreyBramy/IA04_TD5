@@ -1,8 +1,10 @@
 {"ontologie":"file:kb/index.rdf", "reqType":"jena",
 "request":{"requestName":"getInfoById", "requestInfo":"jean"}}
 
-{"ontologie":"file:kb/index.rdf", "reqtype":"jena",
+{"ontologie":"file:kb/index.rdf", "reqType":"jena",
 "request":{"requestName":"getInfoByName", "requestInfo":"Jean"}}
 
-{"ontologie":"file:kb/index.rdf", "reqtype":"jena",
+{"ontologie":"file:kb/index.rdf", "reqType":"jena",
 "request":{"requestName":"getKnowsPerson", "requestInfo":"jean"}}
+
+{"ontologie":"file:kb/index.rdf", "reqType":"sparql"}

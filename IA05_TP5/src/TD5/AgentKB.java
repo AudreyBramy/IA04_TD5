@@ -82,6 +82,7 @@ public class AgentKB extends Agent {
 						addBehaviour(new RequestJenaBehav(message.getConversationId(), ir));
 						System.out.println("type = Jena");
 					} else if (kb.equals("sparql")){
+						System.out.println("type = Sparql");
 						addBehaviour(new RequestSparqlBehav(message.getConversationId(), ir));
 					}
 				} else {
