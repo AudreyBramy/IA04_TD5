@@ -1,24 +1,18 @@
-package TD6;
+package TD5;
 
-import java.io.IOException;
-import java.io.StringWriter;
-
-import TD5.InformRequest;
-import TD5.Message;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
-import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
+import java.io.IOException;
+import java.io.StringWriter;
 
 
 public class AgentPropagateSparql extends Agent {
@@ -26,8 +20,27 @@ public class AgentPropagateSparql extends Agent {
 	private static final long serialVersionUID = 1L;
 	protected ObjectMapper mapper = new ObjectMapper();
 
+    protected void setup() {
+        DFAgentDescription dfd = new DFAgentDescription();
+        dfd.setName(getAID());
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType("Agent");
+        sd.setName("PropagateSparql");
+        dfd.addServices(sd);
+        try {
+            DFService.register(this, dfd);
+        }
+        catch (FIPAException fe) {
+            fe.printStackTrace();
+        }
+
+        mapper = new ObjectMapper();
+        addBehaviour(new ReceiveRequest());
+    }
+
+
 	/**
-	 * R�ception d'un message de la plateforme Jade 
+	 * R�ception d'un message de la plateforme Jade
 	 * Envoie du type de requ�te et du fichier pour initialiser le model.
 	 * @author AudreyB
 	 *
@@ -51,12 +64,12 @@ public class AgentPropagateSparql extends Agent {
 					mapper.writeValue(sw, ir);
 					
 					message.addReceiver(getReceiver("Agent", "KB"));
-					message.setPerformative(ACLMessage.REQUEST);
+					message.setPerformative(ACLMessage.INFORM);
 					String cid = (myAgent.getAID()+""+message.getPostTimeStamp());
 					message.setConversationId(cid);
 					
 					addBehaviour(new FormatRequestBehav(cid));
-					
+				    System.out.println(getReceiver("Agent", "KB"));
 					send(message);
 					
 				} catch (IOException e) {

@@ -27,7 +27,8 @@ public class SecondMain {
             agentKb.start();
             AgentController agentReq = cc.createNewAgent("Req", "TD5.AgentReq", null);
             agentReq.start();
-          
+            AgentController agentPropagateSparql = cc.createNewAgent("PropagateSparql", "TD5.AgentPropagateSparql", null);
+            agentPropagateSparql.start();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

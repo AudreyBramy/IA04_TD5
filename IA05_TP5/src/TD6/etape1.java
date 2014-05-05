@@ -15,11 +15,11 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class etape1 {
 
 	public static void test() {
-		String query = "query.sparql"; // fichier contenant la requête
+		String query = "query/query.sparql"; // fichier contenant la requï¿½te
 		Model model = ModelFactory.createDefaultModel();
 		try {
 			
-			model.read(new FileInputStream("foaf.n3"),null, "TURTLE");
+			model.read(new FileInputStream("kb/foaf.n3"),null, "TURTLE");
 			runExecQuery(query, model);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
