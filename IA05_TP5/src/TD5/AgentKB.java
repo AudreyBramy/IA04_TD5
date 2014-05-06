@@ -81,7 +81,7 @@ public class AgentKB extends Agent {
 						addBehaviour(new RequestJenaBehav(message.getConversationId(), ir));
 						System.out.println("type = Jena");
 					} else if (kb.equals("sparql")){
-						System.out.println("type = Sparql");
+						System.out.println(" Add RequestSparqlBehavior with cid : "+ message.getConversationId()+"\n");
 						addBehaviour(new RequestSparqlBehav(message.getConversationId(), ir));
 					}
 				} else {
@@ -252,17 +252,20 @@ public class AgentKB extends Agent {
 		private Model model;
 		public RequestSparqlBehav(String cid, InformRequest ir){
 			model = ModelFactory.createDefaultModel();
-			model.read(ir.getModelFile(),null,"TURTLE");
-			this.conversId = cid;
+            try {
+                model.read(new FileInputStream("kb/foaf.n3"),null, "TURTLE");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            this.conversId = cid;
         }
-		
 		@Override
 		public void action() {
 
             MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST), MessageTemplate.MatchConversationId(conversId));
 			ACLMessage message = receive(mt);
 			if(message != null){
-                System.out.println("test4");
+                System.out.println("--------------------RESULT------------------------\n");
                 RequestSparql msg = null;
 				try {
 					msg = mapper.readValue(message.getContent(), RequestSparql.class);
@@ -271,21 +274,15 @@ public class AgentKB extends Agent {
 				}
                 // Add result to the message
                 msg = runExecQuery(msg, model);
-
+                FileWriter writer = null;
                 try {
-                    PrintWriter writer = new PrintWriter("query/result.txt", "UTF-8");
-                    writer.println(msg.sparqlResult.toString());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (UnsupportedEncodingException e) {
+                    // Write result in a file
+                    FileOutputStream fileresult = new FileOutputStream("query/result.txt");
+                    ResultSetFormatter.out(fileresult, msg.sparqlResult);
+                } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
-
-                Message reponse = new Message();
-				// Write result in a file
-				
 			}
-			
 		}
 
 		@Override
@@ -299,7 +296,7 @@ public class AgentKB extends Agent {
 			System.out.println(query.toString());
 			QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
 			msg.sparqlResult = queryExecution.execSelect();
-			ResultSetFormatter.out(System.out,msg.sparqlResult);
+            ResultSetFormatter.out(System.out, msg.sparqlResult);
 			queryExecution.close();
             return msg;
 		}

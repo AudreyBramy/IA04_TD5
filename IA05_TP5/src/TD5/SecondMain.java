@@ -29,6 +29,10 @@ public class SecondMain {
             agentReq.start();
             AgentController agentPropagateSparql = cc.createNewAgent("PropagateSparql", "TD5.AgentPropagateSparql", null);
             agentPropagateSparql.start();
+            AgentController propagateGeoSparql = cc.createNewAgent("PropagateGeoSparql", "TD5.AgentPropagateGeoSparql", null);
+            propagateGeoSparql.start();
+            AgentController geodataAgent = cc.createNewAgent("Geodata", "TD5.GeodataAgent", null);
+            geodataAgent.start();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

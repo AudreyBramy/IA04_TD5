@@ -1,30 +1,20 @@
-package TD6;
+package TD5;
 
-import java.io.*;
-
-import TD5.InformRequest;
-import TD5.Message;
-import TD5.AgentKB.InitModelBehav;
-
-import TD5.RequestSparql;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-
+import com.hp.hpl.jena.query.*;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
-import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GeodataAgent extends Agent {
 	
@@ -65,9 +55,7 @@ public class GeodataAgent extends Agent {
                     msg = runExecQuery(msg);
                     FileWriter writer = null;
 
-                    // Write result in a file
-                    FileOutputStream fileresult = new FileOutputStream("query/Georesult.txt");
-                    ResultSetFormatter.out(fileresult, msg.sparqlResult);
+
                 } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
@@ -81,13 +69,21 @@ public class GeodataAgent extends Agent {
 		}
 
         public RequestSparql runExecQuery(RequestSparql msg) {
+            Query query = QueryFactory.read(msg.getRequestFile());
             System.setProperty("http.proxyHost", "proxyweb.utc.fr");
             System.setProperty("http.proxyPort","3128");
-            Query query = QueryFactory.read(msg.getRequestFile());
             System.out.println(query.toString());
             QueryExecution queryExecution = QueryExecutionFactory.sparqlService("http://linkedgeodata.org/sparql", query);
             msg.sparqlResult = queryExecution.execSelect();
             ResultSetFormatter.out(System.out, msg.sparqlResult);
+            // Write result in a file
+            FileOutputStream fileresult = null;
+            try {
+                fileresult = new FileOutputStream("query/Georesult.txt");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            ResultSetFormatter.out(fileresult, msg.sparqlResult);
             queryExecution.close();
             return msg;
         }

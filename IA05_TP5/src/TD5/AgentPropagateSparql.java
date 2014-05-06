@@ -61,6 +61,7 @@ public class AgentPropagateSparql extends Agent {
 					msg = mapper.readValue(message.getContent(), Message.class);
 					ir.setModelFile(msg.getOntologie());
 					ir.setRequestType(msg.getReqType());
+
 					mapper.writeValue(sw, ir);
 					
 					ACLMessage toSend = new ACLMessage(ACLMessage.INFORM);
@@ -71,7 +72,6 @@ public class AgentPropagateSparql extends Agent {
 					toSend.setContent(sw.toString());
 					
 					send(toSend);
-                    System.out.println("appelconstructeur");
 
                     addBehaviour(new FormatRequestBehav(Globalcid));
 					
@@ -105,8 +105,6 @@ public class AgentPropagateSparql extends Agent {
 		private String conversId;
 		
 		public FormatRequestBehav(String cid){
-            System.out.println("testconstructeur");
-
             this.conversId = cid;
 		}
 
@@ -119,7 +117,6 @@ public class AgentPropagateSparql extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF);
             ACLMessage message = receive(mt);
             if(message != null){
-                System.out.println("test");
 
                 RequestSparql msg = null;
                 StringWriter sw = new StringWriter();

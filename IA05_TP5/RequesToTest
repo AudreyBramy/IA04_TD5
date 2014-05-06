@@ -7,4 +7,4 @@
 {"ontologie":"file:kb/index.rdf", "reqType":"jena",
 "request":{"requestName":"getKnowsPerson", "requestInfo":"jean"}}
 
-{"ontologie":"file:kb/index.rdf", "reqType":"sparql"}
+{"ontologie":"file:kb/foaf.n3", "reqType":"sparql"}
